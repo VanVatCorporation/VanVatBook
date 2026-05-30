@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="125dp">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+
+            app:strokeColor="@null"
+            app:shapeAppearanceOverlay="@style/roundedImageView"
+            app:srcCompat="@drawable/ic_launcher_background"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/background1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#bb333333"
+            android:layout_alignParentBottom="true"
+
+            app:strokeColor="@null"
+            app:shapeAppearanceOverlay="@style/roundedImageView"
+            tools:layout_editor_absoluteX="50dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="Name of the fucking book"
+            android:textSize="24sp"
+            android:layout_toEndOf="@+id/icon" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
+
+            app:strokeColor="@null"
+            app:shapeAppearanceOverlay="@style/roundedImageView"
+            app:srcCompat="@drawable/baseline_menu_book_24" />
+
+    </RelativeLayout>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/constraintLayout"
+        android:layout_above="@id/progressBarLayout"
+        android:background="@color/dark_brown">
+        <ScrollView
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/innerLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/textViewDescription"
+                    android:layout_width="247dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center|start"
+                    android:text="@string/detailed_description"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Description of the fucking book Description of the fucking book Description of the fucking book " />
+
+
+
+                <TextView
+                    android:id="@+id/textViewRating"
+                    android:layout_width="247dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center|start"
+                    android:text="@string/detailed_rating"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <LinearLayout
+                    android:id="@+id/ratingLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp">
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+
+
+                <TextView
+                    android:id="@+id/textViewChapter"
+                    android:layout_width="247dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center|start"
+                    android:text="@string/detailed_chapter"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:id="@+id/chapterLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chapter 1"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chapter 2"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chapter 3"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/progressBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/constraintLayoutBottom"
+        android:background="@color/dark_brown">
+
+        <com.vanvatcorporation.vanvatsach.impl.ProgressBarImpl
+            android:id="@+id/loadingBookProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/loadingBookProgressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/loadingBookProgressBar"
+            android:text="1/1" />
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/constraintLayoutBottom"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/light_brown">
+
+
+        <Button
+            android:id="@+id/readButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:text="@string/detailed_read" />
+
+        <Button
+            android:id="@+id/downloadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:text="@string/detailed_download"
+            android:layout_toStartOf="@+id/readButton" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:text="@string/detailed_delete"
+            android:layout_toStartOf="@+id/readButton"
+            android:layout_below="@+id/downloadButton" />
+
+        <Button
+            android:id="@+id/buyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:text="@string/detailed_buy"
+            android:layout_toStartOf="@+id/readButton" />
+
+        <Button
+            android:id="@+id/continueReadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/readButton"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="16dp"
+            android:text="@string/detailed_continue_reading"
+            android:textSize="8sp" />
+
+        <TextView
+            android:id="@+id/bookInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@+id/buyButton"
+            android:text="-\n-" />
+
+        <Spinner
+            android:id="@+id/chapterSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_toStartOf="@+id/deleteButton"
+            android:layout_below="@+id/bookInfo" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
