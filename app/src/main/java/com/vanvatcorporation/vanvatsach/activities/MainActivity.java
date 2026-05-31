@@ -31,7 +31,7 @@ import com.vanvatcorporation.vanvatsach.helper.IOHelper;
 import com.vanvatcorporation.vanvatsach.helper.IOImageHelper;
 import com.vanvatcorporation.vanvatsach.helper.ImageHelper;
 import com.vanvatcorporation.vanvatsach.impl.AppCompatActivityImpl;
-import com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vanvatcorporation.vanvatsach.impl.ViewPagerImpl;
 import com.vanvatcorporation.vanvatsach.impl.java.RunnableImpl;
 import com.vanvatcorporation.vanvatsach.impl.java.RunnableImpl2;
@@ -54,20 +54,16 @@ public class MainActivity extends AppCompatActivityImpl {
 
     ViewPagerImpl viewPager;
 
-
     List<BookListData> bookList;
     RecyclerView bookListView;
     BookListAdapter adapter;
-    //ProgressBar progressBarFetchingBook;
+    // ProgressBar progressBarFetchingBook;
     SwipeRefreshLayout swipeRefreshLayout;
-
 
     List<BookListData> downloadedList;
     RecyclerView downloadedListView;
     BookListAdapter downloadedAdapter;
     SwipeRefreshLayout downloadedSwipeRefreshLayout;
-
-
 
     TextView readTimeTodayText;
     TextView readTimeForStreakTodayText;
@@ -76,11 +72,9 @@ public class MainActivity extends AppCompatActivityImpl {
     ImageView streakIcon;
     SwipeRefreshLayout profileSwipeRefreshLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         MethodConstants.statusBarNoTitleTransition(this);
 
@@ -88,52 +82,50 @@ public class MainActivity extends AppCompatActivityImpl {
 
         View homepageView = getLayoutInflater().inflate(R.layout.pager_main_homepage, null);
         View downloadedView = getLayoutInflater().inflate(R.layout.pager_main_downloaded, null);
-        View View3 = getLayoutInflater().inflate(R.layout.pager_main_homepage, null);
-        View View4 = getLayoutInflater().inflate(R.layout.pager_main_homepage, null);
+        View searchPlaceholderView = new View(this); // Search not yet implemented
         View profileView = getLayoutInflater().inflate(R.layout.pager_main_profile, null);
 
-
-        View belowNavigationBar = findViewById(R.id.belowNavigationBar);
-
-        View navigationButton1 = belowNavigationBar.findViewById(R.id.navigationElement1);
-        View navigationButton2 = belowNavigationBar.findViewById(R.id.navigationElement2);
-        View navigationButton3 = belowNavigationBar.findViewById(R.id.navigationElement3);
-        View navigationButton4 = belowNavigationBar.findViewById(R.id.navigationElement4);
-        View navigationButton5 = belowNavigationBar.findViewById(R.id.navigationElement5);
-
-        View[] navigationButtons = {navigationButton1, navigationButton2, navigationButton3, navigationButton4, navigationButton5};
-
-
-
-
-
-        ((NavigationIconLayout)navigationButton1).runAnimation(NavigationIconLayout.AnimationType.SELECTED);
-
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
 
         viewPager = findViewById(R.id.mainViewPager);
-        viewPager.insertView(homepageView, downloadedView, View3, View4, profileView);
+        viewPager.insertView(homepageView, downloadedView, searchPlaceholderView, profileView);
         viewPager.setupActions(
                 new RunnableImpl2() {
                     @Override
                     public <T, T2> void runWithParam(T param, T2 param2) {
-                        int lastPosition = (int) param;
                         int position = (int) param2;
-
-
-                        ((NavigationIconLayout)navigationButtons[position]).runAnimation(NavigationIconLayout.AnimationType.SELECTED);
-                        ((NavigationIconLayout)navigationButtons[lastPosition]).runAnimation(NavigationIconLayout.AnimationType.UNSELECTED);
-
+                        // Sync bottom nav selection when pager is swiped
+                        int[] itemIds = {
+                                R.id.nav_homepage,
+                                R.id.nav_downloaded,
+                                R.id.nav_search,
+                                R.id.nav_profile
+                        };
+                        if (position >= 0 && position < itemIds.length) {
+                            bottomNav.setSelectedItemId(itemIds[position]);
+                        }
                     }
-                }
-        );
+                });
 
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_homepage) {
+                viewPager.setCurrentItem(0, true);
+            } else if (id == R.id.nav_downloaded) {
+                viewPager.setCurrentItem(1, true);
+            } else if (id == R.id.nav_search) {
+                viewPager.setCurrentItem(2, true);
+            } else if (id == R.id.nav_profile) {
+                viewPager.setCurrentItem(3, true);
+            }
+            return true;
+        });
+        // Select home by default
+        bottomNav.setSelectedItemId(R.id.nav_homepage);
 
-
-
-
-        //Main View
+        // Main View
         bookListView = homepageView.findViewById(R.id.bookList);
-        //progressBarFetchingBook = view.findViewById(R.id.progressBarFetchingBook);
+        // progressBarFetchingBook = view.findViewById(R.id.progressBarFetchingBook);
         swipeRefreshLayout = homepageView.findViewById(R.id.swipeRefreshLayout);
         bookListView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -141,10 +133,9 @@ public class MainActivity extends AppCompatActivityImpl {
         adapter = new BookListAdapter(this, bookList);
         bookListView.setAdapter(adapter);
 
-
-        //Downloaded View
+        // Downloaded View
         downloadedListView = downloadedView.findViewById(R.id.bookList);
-        //progressBarFetchingBook = view.findViewById(R.id.progressBarFetchingBook);
+        // progressBarFetchingBook = view.findViewById(R.id.progressBarFetchingBook);
         downloadedSwipeRefreshLayout = downloadedView.findViewById(R.id.swipeRefreshLayout);
         downloadedListView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -152,47 +143,36 @@ public class MainActivity extends AppCompatActivityImpl {
         downloadedAdapter = new BookListAdapter(this, downloadedList);
         downloadedListView.setAdapter(downloadedAdapter);
 
-
-
-
-        //Profile View
+        // Profile View
         readTimeTodayText = profileView.findViewById(R.id.readTimeToday);
         readTimeForStreakTodayText = profileView.findViewById(R.id.readTimeTodayForStreak);
         readTimeForStreakTodayBar = profileView.findViewById(R.id.readTimeProgress);
         streakText = profileView.findViewById(R.id.streakText);
         streakIcon = profileView.findViewById(R.id.streakFireImage);
-        profileSwipeRefreshLayout = profileView.findViewById(R.id.swipeRefreshLayout);
+        profileSwipeRefreshLayout = (androidx.swiperefreshlayout.widget.SwipeRefreshLayout) profileView;
 
-
-
-
-
-        //Main View
+        // Main View
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
         swipeRefreshLayout.setRefreshing(true);
         refreshData();
 
-
-
-        //Downloaded View
+        // Downloaded View
         downloadedSwipeRefreshLayout.setOnRefreshListener(this::refreshDataDownloaded);
 
         downloadedSwipeRefreshLayout.setRefreshing(true);
         refreshDataDownloaded();
 
-
-
-        //Profile View
+        // Profile View
         profileSwipeRefreshLayout.setOnRefreshListener(this::refreshDataProfile);
 
         profileSwipeRefreshLayout.setRefreshing(true);
         refreshDataProfile();
 
-
-        //Profile View
+        // Profile View
         TextView profileTitle = profileView.findViewById(R.id.textViewProfile);
-        profileTitle.setText(DateHelper.getGreeting(this, (DynamicConstants.account.lastName + " " + DynamicConstants.account.firstName)));
+        profileTitle.setText(DateHelper.getGreeting(this,
+                (DynamicConstants.account.lastName + " " + DynamicConstants.account.firstName)));
 
         Button settingButton = profileView.findViewById(R.id.settingsButton);
         settingButton.setOnClickListener(v -> {
@@ -211,26 +191,10 @@ public class MainActivity extends AppCompatActivityImpl {
             startActivity(intent);
             finish();
         });
-
-
-
-        findViewById(R.id.navigationElement1).setOnClickListener(v -> {
-            viewPager.setCurrentItem(0, true);
+        Button statisticsButton = profileView.findViewById(R.id.statisticsButton);
+        statisticsButton.setOnClickListener(v -> {
+            // Statistics activity not yet implemented
         });
-        findViewById(R.id.navigationElement2).setOnClickListener(v -> {
-            viewPager.setCurrentItem(1, true);
-        });
-        findViewById(R.id.navigationElement3).setOnClickListener(v -> {
-            viewPager.setCurrentItem(2, true);
-        });
-        findViewById(R.id.navigationElement4).setOnClickListener(v -> {
-            viewPager.setCurrentItem(3, true);
-        });
-        findViewById(R.id.navigationElement5).setOnClickListener(v -> {
-            viewPager.setCurrentItem(4, true);
-        });
-
-
 
     }
 
@@ -246,8 +210,7 @@ public class MainActivity extends AppCompatActivityImpl {
         DynamicConstants.account.saveAccountData(this);
     }
 
-    void refreshData()
-    {
+    void refreshData() {
         bookList.clear();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
@@ -266,12 +229,15 @@ public class MainActivity extends AppCompatActivityImpl {
                 }
                 reader.close();
 
-//                BookListData[] bookListData = new Gson().fromJson(response.toString(), BookListData[].class);
-//                bookList.addAll(Arrays.asList(bookListData));
-                BookListData.BookDataFromServer[] serverData = new Gson().fromJson(response.toString(), BookListData.BookDataFromServer[].class);
+                // BookListData[] bookListData = new Gson().fromJson(response.toString(),
+                // BookListData[].class);
+                // bookList.addAll(Arrays.asList(bookListData));
+                BookListData.BookDataFromServer[] serverData = new Gson().fromJson(response.toString(),
+                        BookListData.BookDataFromServer[].class);
 
                 for (BookListData.BookDataFromServer data : serverData) {
-                    if(data.bookAgeRestriction > DynamicConstants.account.age) continue;
+                    if (data.bookAgeRestriction > DynamicConstants.account.age)
+                        continue;
 
                     bookList.add(new BookListData(
                             data.bookId,
@@ -284,13 +250,12 @@ public class MainActivity extends AppCompatActivityImpl {
                             data.bookUrl,
                             data.bookChapters,
                             data.bookDate,
-                            data.bookAgeRestriction
-                    ));
+                            data.bookAgeRestriction));
                 }
 
                 runOnUiThread(() -> {
-                    //progressBarFetchingBook.setVisibility(View.GONE);
-                    //swipeRefreshLayout.setRefreshing(false);
+                    // progressBarFetchingBook.setVisibility(View.GONE);
+                    // swipeRefreshLayout.setRefreshing(false);
                     adapter.notifyDataSetChanged();
                 });
 
@@ -303,22 +268,23 @@ public class MainActivity extends AppCompatActivityImpl {
         });
     }
 
-
-    void refreshDataDownloaded()
-    {
+    void refreshDataDownloaded() {
         downloadedList.clear();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             Looper.prepare();
             try {
-                Map<Integer, BookListData> data = new Gson().fromJson(IOHelper.readFromFile(this, Constants.getTemporaryDownloadedBookDataPath(this)), new TypeToken<Map<Integer, BookListData>>() {}.getType());
-                if(data != null)
-                {
+                Map<Integer, BookListData> data = new Gson().fromJson(
+                        IOHelper.readFromFile(this, Constants.getTemporaryDownloadedBookDataPath(this)),
+                        new TypeToken<Map<Integer, BookListData>>() {
+                        }.getType());
+                if (data != null) {
                     DynamicConstants.account.downloadedBook.clear();
                     for (BookListData dada : data.values()) {
                         dada.isOfflineResource = true;
                         for (BookListData.BookChapter chapter : dada.getBookChapters()) {
-                            chapter.chapterOfflineUrl = IOHelper.CombinePath(IOHelper.getPersistentDataPath(this), String.valueOf(dada.getBookId()), String.valueOf(chapter.chapterId), "book.pdf");
+                            chapter.chapterOfflineUrl = IOHelper.CombinePath(IOHelper.getPersistentDataPath(this),
+                                    String.valueOf(dada.getBookId()), String.valueOf(chapter.chapterId), "book.pdf");
                         }
                         downloadedList.add(dada);
                         DynamicConstants.account.downloadedBook.put(dada.getBookId(), dada);
@@ -339,21 +305,18 @@ public class MainActivity extends AppCompatActivityImpl {
         });
     }
 
-    void refreshDataProfile()
-    {
+    void refreshDataProfile() {
         Account.AccountInformation.AccountData.AccountStatistics stats = DynamicConstants.account.data.accountStatistics;
 
         readTimeTodayText.setText((stats.todayReadTimeMilli / 60000) + " " + getString(R.string.unit_minutes_long));
-        readTimeForStreakTodayText.setText((Constants.MAX_TIME_TO_GET_STREAK_MILLI / 60000) + " " + getString(R.string.unit_minutes_long));
+        readTimeForStreakTodayText.setText(
+                (Constants.MAX_TIME_TO_GET_STREAK_MILLI / 60000) + " " + getString(R.string.unit_minutes_long));
         readTimeForStreakTodayBar.setMax((int) Constants.MAX_TIME_TO_GET_STREAK_MILLI);
         readTimeForStreakTodayBar.setProgress((int) stats.todayReadTimeMilli);
 
-        if(stats.isReceivedStreak)
-        {
+        if (stats.isReceivedStreak) {
             streakIcon.getDrawable().setColorFilter(0xFFFE8706, PorterDuff.Mode.SRC_ATOP);
-        }
-        else
-        {
+        } else {
             streakIcon.getDrawable().setColorFilter(0xFF000000, PorterDuff.Mode.SRC_ATOP);
         }
         streakText.setText(getString(R.string.profile_streak) + ": " + stats.streakCount);
@@ -361,26 +324,9 @@ public class MainActivity extends AppCompatActivityImpl {
         profileSwipeRefreshLayout.setRefreshing(false);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static class BookListData implements Serializable {
 
-        public static class BookChapter implements Serializable
-        {
+        public static class BookChapter implements Serializable {
             private int chapterId = 0;
             private String chapterName = "-";
             private String chapterDescription = "-";
@@ -393,32 +339,41 @@ public class MainActivity extends AppCompatActivityImpl {
             public int getChapterId() {
                 return chapterId;
             }
+
             public String getChapterName() {
                 return chapterName;
             }
+
             public String getChapterDescription() {
                 return chapterDescription;
             }
+
             public String getChapterPdfUrl() {
                 return chapterUrl + "book.pdf";
             }
+
             public String getChapterUrl() {
                 return chapterUrl;
             }
+
             public String getChapterOfflineUrl() {
                 return chapterOfflineUrl;
             }
+
             public int getChapterPages() {
                 return chapterPages;
             }
+
             public int getChapterSize() {
                 return chapterSize;
             }
+
             public int getChapterPriceVND() {
                 return chapterPriceVND;
             }
 
         }
+
         public static class BookDataFromServer {
             private int bookId;
             private String bookTitle;
@@ -430,6 +385,7 @@ public class MainActivity extends AppCompatActivityImpl {
             private long bookDate;
             private int bookAgeRestriction;
         }
+
         private boolean isOfflineResource = false;
         private int bookId;
         private String bookTitle;
@@ -443,7 +399,9 @@ public class MainActivity extends AppCompatActivityImpl {
         private long bookDate;
         private int bookAgeRestriction;
 
-        public BookListData(int bookId, String bookTitle, String bookAuthor, String bookPublisher, String bookDescription, String bookIconUrl, String bookBackgroundUrl, String bookUrl, BookChapter[] bookChapters, long bookDate, int bookAgeRestriction) {
+        public BookListData(int bookId, String bookTitle, String bookAuthor, String bookPublisher,
+                String bookDescription, String bookIconUrl, String bookBackgroundUrl, String bookUrl,
+                BookChapter[] bookChapters, long bookDate, int bookAgeRestriction) {
             this.bookId = bookId;
             this.bookTitle = bookTitle;
             this.bookAuthor = bookAuthor;
@@ -457,13 +415,14 @@ public class MainActivity extends AppCompatActivityImpl {
             this.bookAgeRestriction = bookAgeRestriction;
         }
 
-
         public boolean isOffline() {
             return isOfflineResource;
         }
+
         public int getBookId() {
             return bookId;
         }
+
         public String getBookTitle() {
             return bookTitle;
         }
@@ -471,6 +430,7 @@ public class MainActivity extends AppCompatActivityImpl {
         public String getBookAuthor() {
             return bookAuthor;
         }
+
         public String getBookPublisher() {
             return bookPublisher;
         }
@@ -482,9 +442,11 @@ public class MainActivity extends AppCompatActivityImpl {
         public String getBookIconUrl() {
             return bookIconUrl;
         }
+
         public String getBookBackgroundUrl() {
             return bookBackgroundUrl;
         }
+
         public String getBookUrl() {
             return bookUrl;
         }
@@ -492,26 +454,24 @@ public class MainActivity extends AppCompatActivityImpl {
         public BookChapter[] getBookChapters() {
             return bookChapters;
         }
+
         public long getBookDate() {
             return bookDate;
         }
-
-
-
 
         public void setBookChapters(BookChapter[] bookChapters) {
             this.bookChapters = bookChapters;
         }
 
-
         @NonNull
         @Override
         protected Object clone() {
-            return new BookListData(bookId, bookTitle, bookAuthor, bookPublisher, bookDescription, bookIconUrl, bookBackgroundUrl, bookUrl, bookChapters, bookDate, bookAgeRestriction);
+            return new BookListData(bookId, bookTitle, bookAuthor, bookPublisher, bookDescription, bookIconUrl,
+                    bookBackgroundUrl, bookUrl, bookChapters, bookDate, bookAgeRestriction);
         }
     }
-    public static class BookListAdapter extends RecyclerView.Adapter<BookListViewHolder>
-    {
+
+    public static class BookListAdapter extends RecyclerView.Adapter<BookListViewHolder> {
 
         private List<BookListData> bookList;
         private Context context;
@@ -521,6 +481,7 @@ public class MainActivity extends AppCompatActivityImpl {
             this.context = context;
             this.bookList = bookList;
         }
+
         @Override
         public BookListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(context).inflate(R.layout.cpn_book_list, parent, false);
@@ -535,15 +496,14 @@ public class MainActivity extends AppCompatActivityImpl {
             holder.bookTitle.setText(bookItem.getBookTitle());
             holder.bookAuthor.setText(bookItem.getBookAuthor());
             holder.bookDescription.setText(bookItem.getBookDescription());
-            if(bookItem.isOffline()) {
-                Bitmap iconBitmap = IOImageHelper.LoadFileAsPNGImage(context, IOHelper.CombinePath(IOHelper.getPersistentDataPath(context),
-                        String.valueOf(bookItem.getBookId()), "icon.png"));
-                if(iconBitmap != null)
-                {
+            if (bookItem.isOffline()) {
+                Bitmap iconBitmap = IOImageHelper.LoadFileAsPNGImage(context,
+                        IOHelper.CombinePath(IOHelper.getPersistentDataPath(context),
+                                String.valueOf(bookItem.getBookId()), "icon.png"));
+                if (iconBitmap != null) {
                     holder.bookIcon.setImageBitmap((iconBitmap));
                 }
-            }
-            else {
+            } else {
                 ImageHelper.getImageBitmapFromNetwork(context, bookItem.getBookIconUrl(), new RunnableImpl() {
                     @Override
                     public <T> void runWithParam(T param) {
@@ -570,10 +530,12 @@ public class MainActivity extends AppCompatActivityImpl {
             return bookList.size();
         }
     }
+
     public static class BookListViewHolder extends RecyclerView.ViewHolder {
         TextView bookTitle, bookAuthor, bookDescription, bookPublishingDate;
         ImageView bookIcon;
         View wholeView;
+
         public BookListViewHolder(@NonNull View itemView) {
             super(itemView);
             wholeView = itemView;
@@ -586,5 +548,3 @@ public class MainActivity extends AppCompatActivityImpl {
         }
     }
 }
-
-

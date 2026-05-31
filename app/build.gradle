@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.vanvatcorporation.vanvatsach'
-    compileSdk 35
+    compileSdk 37
 
     defaultConfig {
         applicationId "com.vanvatcorporation.vanvatsach"
         minSdk 21
-        targetSdk 35
+        targetSdk 37
         //Change everytime publishes to Google Play Console
         versionCode 14
         versionName '1.1.3'
@@ -51,15 +51,16 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     //implementation 'com.google.android.gms:play-services-ads:24.2.0'
     testImplementation 'junit:junit:4.13.2'
-    implementation 'org.jsoup:jsoup:1.20.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation 'org.jsoup:jsoup:1.22.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    implementation 'com.google.code.gson:gson:2.14.0'
     implementation "androidx.biometric:biometric:1.1.0"
     implementation 'androidx.palette:palette:1.0.0'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-beta01"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0"
     implementation "androidx.preference:preference:1.2.1"
     //Hashing password in the server-side
     //implementation 'at.favre.lib:bcrypt:0.10.2'
-    implementation 'com.github.barteksc:AndroidPdfViewer:3.1.0-beta.1'
+//    implementation 'com.github.barteksc:AndroidPdfViewer:3.1.0-beta.1'
+    implementation 'io.github.oothp:android-pdf-viewer:3.2.0-beta06'
 }

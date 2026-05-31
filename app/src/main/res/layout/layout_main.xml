@@ -1,75 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dark_brown">
+    android:layout_height="match_parent">
+
     <com.vanvatcorporation.vanvatsach.impl.ViewPagerImpl
         android:id="@+id/mainViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/belowNavigationBar">
+        android:layout_above="@id/bottomNavigation" />
 
-
-    </com.vanvatcorporation.vanvatsach.impl.ViewPagerImpl>
-
-    <LinearLayout
-        android:id="@+id/belowNavigationBar"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:background="@color/light_brown">
-
-        <com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout
-            android:id="@+id/navigationElement1"
-            android:layout_width="75dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            app:navIcon="@drawable/baseline_home_24"
-            app:navText="@string/main_homepage">
-
-        </com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout>
-
-        <com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout
-            android:id="@+id/navigationElement2"
-            android:layout_width="75dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            app:navText="@string/main_downloaded"
-            app:navIcon="@drawable/baseline_download_24" >
-        </com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout>
-
-        <com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout
-            android:id="@+id/navigationElement3"
-            android:layout_width="75dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            app:navText="@string/main_search"
-            app:navIcon="@drawable/baseline_search_24">
-        </com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout>
-
-        <com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout
-            android:id="@+id/navigationElement4"
-            android:layout_width="75dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            app:navText="@string/main_history"
-            app:navIcon="@drawable/baseline_history_24">
-        </com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout>
-
-        <com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout
-            android:id="@+id/navigationElement5"
-            android:layout_width="75dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            app:navText="@string/main_profile"
-            app:navIcon="@drawable/baseline_person_24">
-        </com.vanvatcorporation.vanvatsach.impl.NavigationIconLayout>
-
-    </LinearLayout>
-
+        android:background="?attr/colorSurfaceContainer"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled" />
 
 </RelativeLayout>
