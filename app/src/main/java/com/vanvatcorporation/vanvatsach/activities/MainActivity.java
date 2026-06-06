@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivityImpl {
         profileSwipeRefreshLayout.setOnRefreshListener(this::refreshDataProfile);
 
         profileSwipeRefreshLayout.setRefreshing(true);
-        refreshDataProfile();
+//        refreshDataProfile();
 
         // Profile View
         TextView profileTitle = profileView.findViewById(R.id.textViewProfile);
@@ -235,9 +235,11 @@ public class MainActivity extends AppCompatActivityImpl {
                 BookListData.BookDataFromServer[] serverData = new Gson().fromJson(response.toString(),
                         BookListData.BookDataFromServer[].class);
 
+
                 for (BookListData.BookDataFromServer data : serverData) {
-                    if (data.bookAgeRestriction > DynamicConstants.account.age)
-                        continue;
+                    // TODO: Account age restriction check for Account when account system finishes
+//                    if (data.bookAgeRestriction > DynamicConstants.account.age)
+//                        continue;
 
                     bookList.add(new BookListData(
                             data.bookId,

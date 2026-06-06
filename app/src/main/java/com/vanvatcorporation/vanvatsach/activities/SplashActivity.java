@@ -44,7 +44,6 @@ public class SplashActivity extends AppCompatActivityImpl {
 
     AppSourceChecker.InstallerMethod installerMethod;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,49 +64,42 @@ public class SplashActivity extends AppCompatActivityImpl {
         DynamicConstants.account = Account.setupAccount(this);
 
     }
-    void transitionToNextActivity()
-    {
+
+    void transitionToNextActivity() {
         Intent intent;
-        if(installerMethod == AppSourceChecker.InstallerMethod.OTHER)
-        {
+        if (installerMethod == AppSourceChecker.InstallerMethod.OTHER) {
             intent = new Intent(SplashActivity.this, WarningActivity.class);
-            intent.putExtra("AccountValidate", (DynamicConstants.account != null && DynamicConstants.account.isValid()));
-        }
-        else if(installerMethod == AppSourceChecker.InstallerMethod.UNKNOWN)
-        {
+            intent.putExtra("AccountValidate",
+                    (DynamicConstants.account != null && DynamicConstants.account.isValid()));
+        } else if (installerMethod == AppSourceChecker.InstallerMethod.UNKNOWN) {
             intent = new Intent(SplashActivity.this, WarningActivity.class);
             intent.putExtra("WarningType", EnumHelper.enumToString(installerMethod));
-            intent.putExtra("AccountValidate", (DynamicConstants.account != null && DynamicConstants.account.isValid()));
-        }
-        else if(DynamicConstants.account == null || !DynamicConstants.account.isValid())
-        {
+            intent.putExtra("AccountValidate",
+                    (DynamicConstants.account != null && DynamicConstants.account.isValid()));
+        } else if (DynamicConstants.account == null || !DynamicConstants.account.isValid(this)) {
             intent = new Intent(SplashActivity.this, LoginActivity.class);
-        }
-        else {
+        } else {
             intent = new Intent(SplashActivity.this, MainActivity.class);
         }
         startActivity(intent);
         finish(); // Finish SplashActivity so it's removed from the back stack
     }
 
-    void animatingSplashActivity()
-    {
+    void animatingSplashActivity() {
         loadingProgressBar.setVisibility(View.VISIBLE);
         loadingProgressBar.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_splash_progress_bar_unhide));
 
         // Delay for 2 seconds (2000 milliseconds) before starting the MainActivity
         new Handler().postDelayed(() -> {
 
-
-
             new CountDownTimer(1140, 200) {
                 int tick = 0;
+
                 @Override
                 public void onTick(long millisUntilFinished) {
                     tick++;
 
-                    switch (tick)
-                    {
+                    switch (tick) {
                         case 1:
                             loadingProgressBar.setProgressAnimate(15);
                             break;
@@ -129,7 +121,8 @@ public class SplashActivity extends AppCompatActivityImpl {
 
                 @Override
                 public void onFinish() {
-                    Animation animation = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim_splash_progress_bar_hide);
+                    Animation animation = AnimationUtils.loadAnimation(SplashActivity.this,
+                            R.anim.anim_splash_progress_bar_hide);
                     animation.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
@@ -139,7 +132,8 @@ public class SplashActivity extends AppCompatActivityImpl {
                         @Override
                         public void onAnimationEnd(Animation animation) {
 
-                            Animation animation1 = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim_splash);
+                            Animation animation1 = AnimationUtils.loadAnimation(SplashActivity.this,
+                                    R.anim.anim_splash);
 
                             animation1.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
@@ -169,8 +163,6 @@ public class SplashActivity extends AppCompatActivityImpl {
 
                 }
             }.start();
-
-
 
         }, 1000); // 2000 milliseconds
 
