@@ -1,18 +1,18 @@
 package com.vanvatcorporation.vanvatsach.dynamiclibs.auth;
 
 public class LoginRequest {
-    private String accountUsername;
-    private String accountPassword;
+    private String email;
+    private String password;
 
-    public LoginRequest(String accountUsername, String accountPassword) {
-        this.accountUsername = accountUsername;
-        this.accountPassword = accountPassword;
+    public LoginRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     // Getters and Setters
-    public String getAccountUsername() { return accountUsername; }
-    public void setAccountUsername(String accountUsername) { this.accountUsername = accountUsername; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getAccountPassword() { return accountPassword; }
-    public void setAccountPassword(String accountPassword) { this.accountPassword = accountPassword; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

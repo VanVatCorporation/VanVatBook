@@ -56,10 +56,8 @@ public class AuthRepository {
     }
 
     public void login(String email, String password, AuthCallback<User> callback) {
-        // LoginRequest request = new LoginRequest(email, password);
-        // apiService.login(request).enqueue(new Callback<ApiResponse<User>>() {
-
-        apiService.login(email, password).enqueue(new Callback<ApiResponse<User>>() {
+         LoginRequest request = new LoginRequest(email, password);
+         apiService.login(request).enqueue(new Callback<ApiResponse<User>>() {
             @Override
             public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
                 if (response.isSuccessful() && response.body() != null) {
